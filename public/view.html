@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Post - Nadir Khan Sargiroh</title>
+    <script>
+        // FIXED: Added https:// prefix for live connection
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
         /* --- 1. RESET & BASE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -99,8 +104,6 @@
         /* --- 7. SEARCH DROPDOWN --- */
         .search-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: #FFFFFF; border: 1px solid #CACCC4; border-top: none; border-radius: 0 0 5px 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 2000; display: none; max-height: 300px; overflow-y: auto; text-align: right; }
         .dropdown-item { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; border-bottom: 1px solid #f0f0f0; transition: background 0.2s; direction: ltr; }
-        .item-title-ur { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 18px; color: #444A25; text-align: right; }
-        .item-category-en { font-family: Arial, sans-serif; font-size: 12px; color: #82733B; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -165,7 +168,7 @@
         // 1. Sidebar Sync Logic
         async function syncSidebar() {
             try {
-                const res = await fetch('/api/categories');
+                const res = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await res.json();
                 const sideContainer = document.getElementById('dynamic-side-menu');
                 
@@ -188,19 +191,23 @@
         async function loadContent() {
     try {
         const id = new URLSearchParams(window.location.search).get('id');
-        const res = await fetch(`/api/posts/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
         const post = await res.json();
         const container = document.getElementById('post-view-content');
 
+        // Helper to ensure media path is absolute
+        const getMediaPath = (path) => (path && path.startsWith('/assets/uploads')) ? `${API_BASE_URL}${path}` : path;
+
         let mediaHtml = '';
         const cat = post.category.toLowerCase();
+        const mainMedia = getMediaPath(post.imageUrl);
         
-        // 1. Video Player with Download Disabled
+        // 1. Video Player Logic
         if (cat.includes('video') || cat.includes('ویڈیو')) {
     mediaHtml = `
         <div class="media-wrapper">
             <video 
-                src="${post.imageUrl}" 
+                src="${mainMedia}" 
                 controls 
                 autoplay 
                 loop 
@@ -210,17 +217,17 @@
             </video>
         </div>`;
 } 
-        // 2. Audio Player with Download Disabled
+        // 2. Audio Player Logic
         else if (cat.includes('audio') || cat.includes('آواز')) {
-            const cover = post.thumbnailUrl || '/assets/images/Header Title.png';
+            const cover = getMediaPath(post.thumbnailUrl) || '/assets/images/Header Title.png';
             mediaHtml = `
                 <div class="audio-box" style="background: #E7EBD6; padding: 20px; border-radius: 12px; text-align: center;">
                     <img src="${cover}" class="audio-cover" style="width:100%; max-width:350px; border-radius:10px; margin-bottom:15px;" onerror="this.src='/assets/images/Header Title.png'">
-                    <audio src="${post.imageUrl}" controls controlsList="nodownload" oncontextmenu="return false;" style="width:100%"></audio>
+                    <audio src="${mainMedia}" controls controlsList="nodownload" oncontextmenu="return false;" style="width:100%"></audio>
                 </div>`;
         } 
         else {
-            mediaHtml = `<img src="${post.imageUrl}" style="width:100%; border-radius:5px; margin-bottom:20px;" onerror="this.style.display='none'">`;
+            mediaHtml = `<img src="${mainMedia}" style="width:100%; border-radius:5px; margin-bottom:20px;" onerror="this.style.display='none'">`;
         }
 
         container.innerHTML = `
@@ -262,14 +269,12 @@
             syncSidebar();
             loadContent();
 
-            // Event Listeners
             document.getElementById('menu-btn').onclick = toggleMenu;
             document.getElementById('close-menu-btn').onclick = toggleMenu;
             document.getElementById('menu-overlay').onclick = toggleMenu;
             document.querySelector('.search-btn').onclick = handleSearch;
             document.querySelector('.search-input').onkeypress = (e) => { if (e.key === 'Enter') handleSearch(); };
 
-            // Fixed Search Dropdown Logic
             const searchInput = document.querySelector('.search-input');
             const dropdown = document.getElementById('search-results-dropdown');
 
@@ -277,11 +282,11 @@
                 const keyword = e.target.value.trim();
                 if (keyword.length < 2) { dropdown.style.display = 'none'; return; }
                 try {
-                    const res = await fetch(`/api/posts?search=${encodeURIComponent(keyword)}`);
-                    const posts = await res.json(); // FIXED
+                    const res = await fetch(`${API_BASE_URL}/api/posts?search=${encodeURIComponent(keyword)}`);
+                    const posts = await res.json(); 
                     if (posts && posts.length > 0) {
                         dropdown.innerHTML = posts.map(p => `
-                            <a href="${p.category === 'photo' ? 'photo-view.html' : 'view.html'}?id=${p._id}" class="dropdown-item">
+                            <a href="${p.category.toLowerCase().includes('photo') ? 'photo-view.html' : 'view.html'}?id=${p._id}" class="dropdown-item">
                                 <span class="item-category-en">${p.category}</span>
                                 <span class="item-title-ur">${p.title}</span>
                             </a>

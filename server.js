@@ -23,21 +23,18 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- NUCLEAR REQUEST LOGGER ---
-// This will print every image request to your VS Code terminal
-app.use((req, res, next) => {
-    if (req.url.includes('uploads') || req.url.includes('.jpg') || req.url.includes('.png')) {
-        console.log(`📸 Image Requested: ${req.url}`);
-    }
-    next();
-});
-
 // 2. Session Configuration
+app.set('trust proxy', 1); // <--- Add this line here
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'nadir_khan_private_key', 
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
+    saveUninitialized: false, 
+    cookie: { 
+        secure: true,    // <--- Change to true
+        sameSite: 'none', // <--- Add this line
+        maxAge: 24 * 60 * 60 * 1000 
+    }
 }));
 
 // 3. Authentication Middleware

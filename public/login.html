@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Nadir Khan Sargiroh</title>
+    <script>
+        // FIXED: Added https:// prefix
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
         body { background-color: #f4f4f4; font-family: 'Trebuchet MS', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
@@ -29,17 +34,25 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                // FIXED: Added backticks and credentials: 'include'
+                const res = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include' // CRITICAL: Allows the session cookie to be saved
+                });
 
-            const data = await res.json();
-            if (data.success) {
-                window.location.href = '/admin-index.html'; // Redirect to your new panel
-            } else {
-                alert('Invalid Credentials');
+                const data = await res.json();
+                if (data.success) {
+                    // Redirect to the dashboard
+                    window.location.href = 'admin-index.html';
+                } else {
+                    alert('Invalid Credentials');
+                }
+            } catch (err) {
+                console.error("Login Error:", err);
+                alert("Could not connect to the server.");
             }
         };
     </script>

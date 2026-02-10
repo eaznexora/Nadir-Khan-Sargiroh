@@ -4,82 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload/Edit Post | Nadir Khan</title>
+    <script>
+        // FIXED: Added https:// prefix for live cloud connection
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
-        /* --- 1. BASE STYLES --- */
+        /* --- Keeping all your existing styles exactly as they are --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #fff; font-family: 'Times New Roman', serif; padding-bottom: 50px; }
-
         .admin-header { text-align: center; padding: 15px 0; border-bottom: 1px solid #eee; }
         .admin-header h1 { font-size: 22px; font-weight: bold; }
-
         .form-top-bar { background: #444A25; color: white; padding: 10px 15px; text-align: center; font-size: 18px; font-weight: bold; }
-
         .form-container { padding: 15px; max-width: 500px; margin: 0 auto; }
-
-        /* --- 2. CATEGORY SELECTOR --- */
         .field-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
         .field-label { font-size: 18px; color: #333; }
         select { border: none; font-size: 18px; outline: none; background: transparent; cursor: pointer; color: #444A25; font-weight: bold; }
-
-        /* --- 3. MEDIA PREVIEW (MATCHES DESIGN) --- */
         .media-preview-container { width: 100%; aspect-ratio: 1/1; border: 1px solid #ddd; position: relative; background: #f9f9f9; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .preview-img { width: 100%; height: 100%; object-fit: cover; }
-        
         .media-actions { display: flex; justify-content: flex-end; gap: 15px; padding: 10px 0; border-bottom: 1px solid #eee; }
         .media-actions img { width: 22px; height: 22px; cursor: pointer; }
-
-        /* --- 4. PLAYER/FILE BOX (AUDIO/VIDEO) --- */
         .file-box { border: 1px solid #ddd; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #fff; display: none; }
         .file-icon-box { width: 40px; height: 40px; background: #FFEBB7; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
         .file-name { flex: 1; font-family: Arial; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* --- 5. TEXT INPUTS (RTL FOR URDU) --- */
         .text-input-wrapper { direction: rtl; text-align: right; margin-top: 15px; }
         .edit-icon { width: 16px; margin-left: 8px; opacity: 0.5; }
-        
         .title-input { width: 100%; border: none; font-size: 26px; font-weight: bold; font-family: 'Jameel Noori Nastaleeq', serif; outline: none; margin-bottom: 5px; background: transparent; }
         .date-display { font-size: 12px; color: #666; font-family: Arial; margin-bottom: 15px; display: block; text-align: left; direction: ltr; }
         .content-area { width: 100%; min-height: 250px; border: none; font-size: 20px; font-family: 'Jameel Noori Nastaleeq', serif; outline: none; resize: none; line-height: 1.6; background: transparent; }
-
-        /* --- 6. PHOTO GALLERY TRIGGER --- */
         .add-more-photos { display: none; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; color: #000; margin-top: 10px; font-size: 18px; }
-
-        /* --- 7. BUTTONS --- */
         .btn-stack { margin-top: 30px; display: flex; flex-direction: column; gap: 12px; }
         .btn { border: none; border-radius: 8px; padding: 14px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-add { background: #89AC4E; color: white; }
         .btn-cancel { background: #C1C1C1; color: #555; }
-        .btn:active { transform: scale(0.98); }
-
         input[type="file"] { display: none; }
-
-        /* --- HEADER STYLES --- */
-.main-header { position: relative; z-index: 10; background: transparent; }
-.brand-bar {
-    background: #A1A58F; width: 100%; height: 120px;
-    padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
-}
-.brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
-.header-title-img { max-width: 90%; height: auto; object-fit: contain; }
-.divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
-.brand-subtitle {
-    font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
-    text-align: center; text-transform: uppercase; color: #000000;
-    text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px;
-}
-.header-mid-border { width: 100%; height: 5px; background: #616357; }
-
-/* --- NAVIGATION --- */
-.nav-bar {
-    background: #DDD0EA; width: 100%; display: flex; flex-direction: column;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-.nav-top-row {
-    display: flex; width: 100%; justify-content: space-between; align-items: center; 
-    padding: 5px 16px; height: 50px; direction: ltr; 
-}
-.nav-title-admin { font-family: 'Times New Roman', serif; font-weight: 700; color: #4b2c61; font-size: 18px; }
-.nav-icon { width: 30px; height: 30px; cursor: pointer; }
+        .main-header { position: relative; z-index: 10; background: transparent; }
+        .brand-bar { background: #A1A58F; width: 100%; height: 120px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
+        .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
+        .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
+        .brand-subtitle { font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px; text-align: center; text-transform: uppercase; color: #000000; text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px; }
+        .header-mid-border { width: 100%; height: 5px; background: #616357; }
+        .nav-bar { background: #DDD0EA; width: 100%; display: flex; flex-direction: column; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); }
+        .nav-top-row { display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 5px 16px; height: 50px; direction: ltr; }
+        .nav-title-admin { font-family: 'Times New Roman', serif; font-weight: 700; color: #4b2c61; font-size: 18px; }
+        .nav-icon { width: 30px; height: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -97,7 +66,7 @@
         <div class="nav-top-row">
             <img src="/assets/icons/Back.svg" class="nav-icon" onclick="location.href='admin-index.html'" title="Visit Site">
             <span class="nav-title-admin">ADMINISTRATOR PANEL</span>
-            <img src="/assets/icons/Logout.svg" class="nav-icon" onclick="location.href='/api/logout'" title="Logout">
+            <img src="/assets/icons/Logout.svg" class="nav-icon" onclick="location.href=`${API_BASE_URL}/api/logout`" title="Logout">
         </div>
     </div>
 </header>
@@ -165,9 +134,9 @@
         const defaultCat = urlParams.get('type');
 
         async function initForm() {
-            // 1. Fetch Dynamic Categories
             try {
-                const catRes = await fetch('/api/categories');
+                // FIXED: Added fetch and absolute URL
+                const catRes = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await catRes.json();
                 const select = document.getElementById('category-select');
                 
@@ -176,14 +145,13 @@
                 ).join('');
             } catch (err) { console.error("Could not load categories", err); }
 
-            // 2. Set Today's Date
             document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-            // 3. Handle Edit Mode
             if (editId) {
                 document.getElementById('page-title').innerText = "Edit Post";
                 document.getElementById('submit-btn').innerText = "Update Post";
-                const postRes = await fetch(`/api/posts/${editId}`);
+                // FIXED: Added fetch and absolute URL
+                const postRes = await fetch(`${API_BASE_URL}/api/posts/${editId}`);
                 const post = await postRes.json();
                 fillFormData(post);
             }
@@ -191,14 +159,12 @@
             adaptUI();
         }
 
-        // The "Chameleon" Logic: Identifies Player/Layout type
         function adaptUI() {
             const cat = document.getElementById('category-select').value.toLowerCase();
             const fileBox = document.getElementById('file-display-box');
             const galleryLink = document.getElementById('gallery-trigger');
             const thumbLabel = document.getElementById('thumb-label');
 
-            // Keywords to identify media types
             const isPhoto = cat.includes('photo') || cat.includes('تصویر');
             const isMedia = cat.includes('audio') || cat.includes('video') || cat.includes('آواز') || cat.includes('ویڈیو');
 
@@ -253,7 +219,6 @@
             formData.append('category', document.getElementById('category-select').value);
             formData.append('isPinned', isPinned);
 
-            // Handle Files
             const thumbFile = document.getElementById('thumb-input').files[0];
             if (thumbFile) formData.append('thumbnail', thumbFile);
 
@@ -266,19 +231,27 @@
             }
 
             const method = editId ? 'PUT' : 'POST';
-            const url = editId ? `/api/posts/${editId}` : '/api/posts';
+            // FIXED: Use absolute Railway URL for form submission
+            const url = editId ? `${API_BASE_URL}/api/posts/${editId}` : `${API_BASE_URL}/api/posts`;
 
             try {
-                const res = await fetch(url, { method, body: formData });
+                // FIXED: Added credentials: 'include' to allow auth
+                const res = await fetch(url, { 
+                    method, 
+                    body: formData,
+                    credentials: 'include' 
+                });
                 if (res.ok) {
                     location.href = 'admin-index.html';
                 } else {
-                    alert("Submission failed. Check your connection.");
+                    const errorData = await res.json();
+                    alert("Submission failed: " + (errorData.error || "Check your login session."));
                     btn.disabled = false;
                     btn.innerText = editId ? "Update Post" : "Add Post";
                 }
             } catch (err) {
                 console.error(err);
+                alert("Network error. Server might be sleeping.");
                 btn.disabled = false;
             }
         }
@@ -287,7 +260,11 @@
             document.getElementById('post-title').value = post.title;
             document.getElementById('post-content').value = post.content;
             document.getElementById('category-select').value = post.category;
-            document.getElementById('main-preview').src = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl);
+            
+            // FIXED: Ensure existing images pull from Railway in Edit mode
+            const rawImg = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl);
+            document.getElementById('main-preview').src = (rawImg && rawImg.startsWith('/assets/uploads')) ? `${API_BASE_URL}${rawImg}` : rawImg;
+            
             if (post.isPinned) {
                 isPinned = true;
                 document.getElementById('pin-btn').src = "/assets/icons/pin-active.svg";

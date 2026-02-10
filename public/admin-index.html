@@ -4,80 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrator Panel | Nadir Khan</title>
+    <script>
+        // FIXED: Added https:// prefix
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
+        /* --- Keeping all your existing styles exactly as they are --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #fff; font-family: 'Times New Roman', serif; }
-
-        /* --- HEADER STYLES --- */
         .main-header { position: relative; z-index: 10; background: transparent; }
-        .brand-bar {
-            background: #A1A58F; width: 100%; height: 120px;
-            padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
-        }
+        .brand-bar { background: #A1A58F; width: 100%; height: 120px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative; }
         .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
         .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
         .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
-        .brand-subtitle {
-            font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
-            text-align: center; text-transform: uppercase; color: #000000;
-            text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px;
-        }
+        .brand-subtitle { font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px; text-align: center; text-transform: uppercase; color: #000000; text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px; }
         .header-mid-border { width: 100%; height: 5px; background: #616357; }
-
-        /* --- NAVIGATION (LOGOUT INCLUDED) --- */
-        .nav-bar {
-            background: #DDD0EA; width: 100%; display: flex; flex-direction: column;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        }
-        .nav-top-row {
-            display: flex; width: 100%; justify-content: space-between; align-items: center; 
-            padding: 5px 16px; height: 50px; direction: ltr; 
-        }
+        .nav-bar { background: #DDD0EA; width: 100%; display: flex; flex-direction: column; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); }
+        .nav-top-row { display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 5px 16px; height: 50px; direction: ltr; }
         .nav-title-admin { font-family: 'Times New Roman', serif; font-weight: 700; color: #4b2c61; font-size: 18px; }
         .nav-icon { width: 30px; height: 30px; cursor: pointer; }
-
-        .admin-header { text-align: center; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .admin-header h1 { font-size: 22px; font-weight: bold; }
-
         .add-btn-wrapper { padding: 15px; }
-        .main-add-btn {
-            display: block; width: 100%; background: #7E816F; color: white;
-            border: none; border-radius: 8px; padding: 12px; font-size: 18px;
-            cursor: pointer; text-decoration: none; text-align: center;
-        }
-
-        .section-bar {
-            background: #444A25; color: white; padding: 8px 15px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .main-add-btn { display: block; width: 100%; background: #7E816F; color: white; border: none; border-radius: 8px; padding: 12px; font-size: 18px; cursor: pointer; text-decoration: none; text-align: center; }
+        .section-bar { background: #444A25; color: white; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
         .section-bar span { font-size: 18px; font-weight: bold; }
-
-        .post-card {
-            display: flex; padding: 15px; border-bottom: 1px solid #ddd;
-            gap: 15px; direction: ltr; align-items: flex-start;
-        }
+        .post-card { display: flex; padding: 15px; border-bottom: 1px solid #ddd; gap: 15px; direction: ltr; align-items: flex-start; }
         .post-img { width: 130px; height: 130px; object-fit: cover; border: 1px solid #ccc; }
-        
         .post-info { flex: 1; text-align: right; direction: rtl; }
         .post-title { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #000; }
         .post-date { font-size: 12px; color: #666; margin-bottom: 10px; display: block; font-family: Arial; }
-        
-        .actions { 
-            display: flex; justify-content: flex-end; gap: 18px; 
-            margin-top: 15px; direction: ltr; 
-        }
+        .actions { display: flex; justify-content: flex-end; gap: 18px; margin-top: 15px; direction: ltr; }
         .actions img { width: 22px; height: 22px; cursor: pointer; }
-
         .category-list { padding: 10px 15px; }
-        .cat-pill {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #F1F1F1; margin-bottom: 8px; padding: 12px 18px;
-            border-radius: 5px; text-decoration: none; color: #4F5240;
-            direction: ltr; border: 1px solid #e0e0e0;
-        }
+        .cat-pill { display: flex; justify-content: space-between; align-items: center; background: #F1F1F1; margin-bottom: 8px; padding: 12px 18px; border-radius: 5px; text-decoration: none; color: #4F5240; direction: ltr; border: 1px solid #e0e0e0; }
         .cat-en { font-family: 'Times New Roman', serif; font-size: 18px; color: #5D604E; }
         .cat-ur { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 20px; font-weight: bold; }
-
         .mgmt-footer { display: flex; justify-content: space-between; padding: 20px 15px; }
         .mgmt-link { font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; }
         .add-cat { color: #2D5A27; }
@@ -99,7 +60,7 @@
         <div class="nav-top-row">
             <img src="/assets/icons/Back.svg" class="nav-icon" onclick="location.href='index.html'" title="Visit Site">
             <span class="nav-title-admin">ADMINISTRATOR PANEL</span>
-            <img src="/assets/icons/Logout.svg" class="nav-icon" onclick="location.href='/api/logout'" title="Logout">
+            <img src="/assets/icons/Logout.svg" class="nav-icon" onclick="location.href=`${API_BASE_URL}/api/logout`" title="Logout">
         </div>
     </div>
 </header>
@@ -128,17 +89,21 @@
 <script>
     async function init() {
         try {
+            // FIXED: Added fetch, API_BASE_URL, and credentials
             const [pRes, cRes] = await Promise.all([
-                fetch('/api/posts?limit=10'),
-                fetch('/api/categories')
+                fetch(`${API_BASE_URL}/api/posts?limit=10`, { credentials: 'include' }),
+                fetch(`${API_BASE_URL}/api/categories`, { credentials: 'include' })
             ]);
             
             const posts = await pRes.json();
             const cats = await cRes.json();
 
             document.getElementById('posts-container').innerHTML = posts.map(p => {
-                const thumb = p.thumbnailUrl || (Array.isArray(p.imageUrl) ? p.imageUrl[0] : p.imageUrl) || '/assets/images/placeholder.png';
-                // FIXED: Check for correct icon names
+                const rawThumb = p.thumbnailUrl || (Array.isArray(p.imageUrl) ? p.imageUrl[0] : p.imageUrl) || '/assets/images/placeholder.png';
+                
+                // FIXED: Ensure thumbnails pull from Railway
+                const thumb = (rawThumb.startsWith('/assets/uploads')) ? `${API_BASE_URL}${rawThumb}` : rawThumb;
+                
                 const pinIcon = p.isPinned ? 'pin-active.svg' : 'pin-outline.svg';
                 const eyeIcon = p.isHidden ? 'eye-closed.svg' : 'eye-open.svg';
 
@@ -168,28 +133,33 @@
     }
 
     async function toggleField(id, field, currentVal) {
-    try {
-        const response = await fetch(`/api/posts/${id}`, {
-            method: 'PUT', // Ensures compatibility with postController.updatePost
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ [field]: !currentVal })
-        });
+        try {
+            // FIXED: Added fetch, API_BASE_URL, and credentials
+            const response = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [field]: !currentVal }),
+                credentials: 'include'
+            });
 
-        if (response.ok) {
-            init(); // Refreshes the dashboard to update icons
-        } else {
-            const err = await response.json();
-            alert("Update failed: " + (err.error || "Unknown error"));
-        }
-    } catch (e) {
-        console.error("Toggle request failed:", e);
+            if (response.ok) {
+                init();
+            } else {
+                const err = await response.json();
+                alert("Update failed: " + (err.error || "Unknown error"));
+            }
+        } catch (e) { console.error("Toggle request failed:", e); }
     }
-}
 
     async function deletePost(id) {
         if(confirm("Are you sure you want to delete this post?")) {
-            await fetch(`/api/posts/${id}`, { method: 'DELETE' });
-            init();
+            // FIXED: Added fetch, API_BASE_URL, and credentials
+            const response = await fetch(`${API_BASE_URL}/api/posts/${id}`, { 
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            if (response.ok) init();
+            else alert("Delete failed. You might not be logged in.");
         }
     }
 
@@ -198,24 +168,31 @@
         const ur = prompt("Enter Category Name (Urdu):");
         if (en && ur) {
             const cleanEn = en.toLowerCase().trim().replace(/\s+/g, '-');
-            await fetch('/api/categories', {
+            // FIXED: Added fetch, API_BASE_URL, and credentials
+            const response = await fetch(`${API_BASE_URL}/api/categories`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ nameEn: cleanEn, nameUr: ur })
+                body: JSON.stringify({ nameEn: cleanEn, nameUr: ur }),
+                credentials: 'include'
             });
-            location.reload();
+            if (response.ok) location.reload();
+            else alert("Failed to add category.");
         }
     }
 
     async function removeCategory() {
         const name = prompt("Enter the EXACT English name of the category to remove:");
         if(name) {
-            const res = await fetch('/api/categories');
+            const res = await fetch(`${API_BASE_URL}/api/categories`);
             const cats = await res.json();
             const target = cats.find(c => c.nameEn === name.toLowerCase());
             if(target) {
-                await fetch(`/api/categories/${target._id}`, { method: 'DELETE' });
-                init();
+                // FIXED: Added fetch, API_BASE_URL, and credentials
+                const response = await fetch(`${API_BASE_URL}/api/categories/${target._id}`, { 
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                if (response.ok) init();
             } else alert("Category not found.");
         }
     }

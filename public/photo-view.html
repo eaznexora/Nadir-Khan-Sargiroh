@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Nadir Khan Sargiroh</title>
+    <script>
+        // FIXED: Added https:// prefix for live connection
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
         /* --- RESET & BASE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -172,7 +177,7 @@
     // 1. Sidebar Sync - Correctly pulls categories from DB
     async function syncSidebar() {
         try {
-            const res = await fetch('/api/categories');
+            const res = await fetch(`${API_BASE_URL}/api/categories`);
             const categories = await res.json();
             const sideContainer = document.getElementById('dynamic-side-menu');
             
@@ -191,36 +196,30 @@
         } catch (err) { console.error("Sidebar sync failed", err); }
     }
 
-    // 2. Initialize Gallery Logic - Fixed Pathing and Syntax
+    // 2. Initialize Gallery Logic - Fixed Pathing
    async function initGallery() {
     try {
         const id = new URLSearchParams(window.location.search).get('id');
-        const res = await fetch(`/api/posts/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
         const post = await res.json();
-        
-        console.log("RAW DATABASE DATA:", post.imageUrl); // Check your F12 console for this!
 
-        // NUCLEAR PATH CLEANER: Strips everything and forces the working folder
+        // FIXED: Nuclear Path Cleaner handles Railway absolute URLs
         const nuclearFix = (path) => {
             if (!path) return '/assets/images/Header Title.png';
-            // 1. Get just the filename (e.g., 'image.jpg')
             const parts = path.split(/[\\\/]/); 
             const fileName = parts[parts.length - 1];
-            // 2. Force the exact path that worked in your manual URL test
-            return `/assets/uploads/${fileName}`; 
+            return `${API_BASE_URL}/assets/uploads/${fileName}`; 
         };
 
-        // Apply fix to arrays or single strings
         const imgArray = Array.isArray(post.imageUrl) 
             ? post.imageUrl.map(nuclearFix) 
             : [nuclearFix(post.imageUrl)];
         
         total = imgArray.length;
 
-        // Build HTML
         let slides = imgArray.map(src => `
             <div class="slide">
-                <img src="${src}" onerror="this.src='/assets/images/Header Title.png'; console.log('Failed to load:', this.src)">
+                <img src="${src}" onerror="this.src='/assets/images/Header Title.png';">
             </div>`).join('');
             
         let dots = imgArray.map((_, i) => `<div class="dot ${i===0?'active':''}"></div>`).join('');
@@ -239,7 +238,6 @@
                 <div class="post-full-content">${post.content}</div>
             </div>`;
 
-        // Reset slider events
         const slider = document.getElementById('slider');
         slider.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive: true});
         slider.addEventListener('touchend', e => {
@@ -287,14 +285,12 @@
         syncSidebar();
         initGallery();
 
-        // Menu Handlers
         document.getElementById('menu-btn').onclick = toggleMenu;
         document.getElementById('close-menu-btn').onclick = toggleMenu;
         document.getElementById('menu-overlay').onclick = toggleMenu;
         document.querySelector('.search-btn').onclick = handleSearch;
         document.querySelector('.search-input').onkeypress = (e) => { if (e.key === 'Enter') handleSearch(); };
 
-        // Live Search Logic - Corrected routing to avoid view.html/photo-view.html confusion
         const searchInput = document.querySelector('.search-input');
         const dropdown = document.getElementById('search-results-dropdown');
         if (searchInput) {
@@ -302,7 +298,7 @@
                 const keyword = e.target.value.trim();
                 if (keyword.length < 2) { dropdown.style.display = 'none'; return; }
                 try {
-                    const res = await fetch(`/api/posts?search=${encodeURIComponent(keyword)}`);
+                    const res = await fetch(`${API_BASE_URL}/api/posts?search=${encodeURIComponent(keyword)}`);
                     const posts = await res.json(); 
                     if (posts && posts.length > 0) {
                         dropdown.innerHTML = posts.map(p => {

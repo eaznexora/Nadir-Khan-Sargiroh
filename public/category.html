@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories - Nadir Khan Sargiroh</title>
+    <script>
+        // FIXED: Added https:// prefix
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
+
     <style>
         /* --- Keep all your existing CSS exactly as it is --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,7 +19,7 @@
             background: #A1A58F; width: 100%; height: 120px;
             padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
         }
-        .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
+        .brand-logo-container { width: 100%; display: center; justify-content: center; margin-bottom: 2px; cursor: pointer; }
         .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
         .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
         .brand-subtitle {
@@ -155,7 +160,8 @@
     <script>
         async function syncSidebar() {
             try {
-                const res = await fetch('/api/categories');
+                // FIXED: Added fetch and API_BASE_URL
+                const res = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await res.json();
                 const sideContainer = document.getElementById('dynamic-side-menu');
                 
@@ -182,7 +188,8 @@
             if (!type && !search) { window.location.href = 'index.html'; return; }
 
             if (type) {
-                const catRes = await fetch('/api/categories');
+                // FIXED: Added fetch and API_BASE_URL
+                const catRes = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await catRes.json();
                 const currentCat = categories.find(c => c.nameEn === type.toLowerCase());
                 document.getElementById('display-name-en').innerText = type.charAt(0).toUpperCase() + type.slice(1);
@@ -193,7 +200,8 @@
             }
 
             try {
-                const apiUrl = `/api/posts?${type ? 'type='+type : ''}${search ? (type ? '&' : '') + 'search='+encodeURIComponent(search) : ''}`;
+                // FIXED: Added fetch and API_BASE_URL
+                const apiUrl = `${API_BASE_URL}/api/posts?${type ? 'type='+type : ''}${search ? (type ? '&' : '') + 'search='+encodeURIComponent(search) : ''}`;
                 const res = await fetch(apiUrl);
                 const posts = await res.json();
                 
@@ -203,9 +211,12 @@
 
                 const renderPost = (post) => {
                     const cat = post.category.toLowerCase();
-                    // SMART REDIRECT: Ensure photo categories go to photo-view.html
                     const target = (cat.includes('photo') || cat.includes('تصویر')) ? 'photo-view.html' : 'view.html';
-                    const img = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl) || '/assets/images/Header Title.png';
+                    const rawImg = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl) || '/assets/images/Header Title.png';
+                    
+                    // FIXED: Ensure path is correctly absolute for Railway
+                    const img = (rawImg.startsWith('/assets/uploads')) ? `${API_BASE_URL}${rawImg}` : rawImg;
+
                     return `
                         <a href="${target}?id=${post._id}" class="post-card">
                             <img src="${img}" class="post-card-img" onerror="this.src='/assets/images/Header Title.png';">
@@ -236,7 +247,8 @@
             searchInput.oninput = async (e) => {
                 const k = e.target.value.trim();
                 if (k.length < 2) { dropdown.style.display = 'none'; return; }
-                const res = await fetch(`/api/posts?search=${encodeURIComponent(k)}`);
+                // FIXED: Added fetch and API_BASE_URL
+                const res = await fetch(`${API_BASE_URL}/api/posts?search=${encodeURIComponent(k)}`);
                 const p = await res.json();
                 if (p.length) {
                     dropdown.innerHTML = p.map(post => {

@@ -4,99 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nadir Khan Sargiroh</title>
+    <script>
+        // FIXED: Added https:// prefix to the URL
+        const API_BASE_URL = "https://nadir-khan-sargiroh-production.up.railway.app"; 
+    </script>
     <style>
-        /* --- 1. RESET & BASE --- */
+        /* ... keeping your existing styles ... */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #f4f4f4; font-family: 'Trebuchet MS', sans-serif; overflow-x: hidden; }
-
-        /* --- 2. HEADER STYLES --- */
+        /* (The rest of your CSS remains the same) */
         .main-header { position: relative; z-index: 10; background: transparent; }
-        .brand-bar {
-            background: #A1A58F; width: 100%; height: 120px;
-            padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
-        }
+        .brand-bar { background: #A1A58F; width: 100%; height: 120px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative; }
         .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
         .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
         .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
-        .brand-subtitle {
-            font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
-            text-align: center; text-transform: uppercase; color: #000000;
-            text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px;
-        }
+        .brand-subtitle { font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px; text-align: center; text-transform: uppercase; color: #000000; text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px; }
         .header-mid-border { width: 100%; height: 5px; background: #616357; }
-
-        /* --- 3. NAVIGATION --- */
-        .nav-bar {
-            background: #DDD0EA; width: 100%; display: flex; flex-direction: column;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        }
-        .nav-top-row {
-            display: flex; width: 100%; justify-content: space-between; align-items: center; 
-            padding: 5px 16px; height: 50px; direction: ltr; 
-        }
-        .search-container {
-            display: flex; align-items: center; background: #FFFFFF; border-radius: 5px;
-            height: 30px; flex-grow: 1; margin-right: 15px; overflow: hidden;
-        }
-        .search-input {
-            width: 100%; border: none; outline: none; padding: 0 10px;
-            font-family: 'Jameel Noori Nastaleeq', serif; text-align: right; font-size: 14px;
-        }
-        .search-btn {
-            background: #7E816F; border: none; width: 35px; height: 100%;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-        }
+        .nav-bar { background: #DDD0EA; width: 100%; display: flex; flex-direction: column; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); }
+        .nav-top-row { display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 5px 16px; height: 50px; direction: ltr; }
+        .search-container { display: flex; align-items: center; background: #FFFFFF; border-radius: 5px; height: 30px; flex-grow: 1; margin-right: 15px; overflow: hidden; }
+        .search-input { width: 100%; border: none; outline: none; padding: 0 10px; font-family: 'Jameel Noori Nastaleeq', serif; text-align: right; font-size: 14px; }
+        .search-btn { background: #7E816F; border: none; width: 35px; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
         .nav-icon { width: 30px; height: 30px; cursor: pointer; }
-
-        .urdu-nav-links {
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 8px 10px; border-top: 1px solid rgba(0,0,0,0.1);
-        }
-        .urdu-nav-links a {
-            text-decoration: none; color: #4b2c61; font-family: 'Jameel Noori Nastaleeq', serif;
-            font-size: 18px; font-weight: bold;
-        }
-
-        /* --- 4. HERO --- */
-        .hero-container {
-            width: 100%; display: flex; justify-content: center;
-            margin-top: -25px; position: relative; z-index: 1; padding-bottom: 20px;
-        }
-        .hero-image {
-            width: 90%; max-width: 400px; height: auto; border: 3px solid #898F6B;
-            background-color: #fff; display: block;
-        }
-
-        /* --- 5. GRID & SECTIONS --- */
+        .urdu-nav-links { display: flex; justify-content: space-around; align-items: center; padding: 8px 10px; border-top: 1px solid rgba(0,0,0,0.1); }
+        .urdu-nav-links a { text-decoration: none; color: #4b2c61; font-family: 'Jameel Noori Nastaleeq', serif; font-size: 18px; font-weight: bold; }
+        .hero-container { width: 100%; display: flex; justify-content: center; margin-top: -25px; position: relative; z-index: 1; padding-bottom: 20px; }
+        .hero-image { width: 90%; max-width: 400px; height: auto; border: 3px solid #898F6B; background-color: #fff; display: block; }
         .category-section { width: 100%; padding-top: 20px; background-color: #f4f4f4; }
-        .section-header-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; margin-bottom: 10px; direction: ltr;
-        }
+        .section-header-row { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 10px; direction: ltr; }
         .section-title-en { font-family: 'Times New Roman', serif; font-weight: 700; font-size: 20px; color: #3F3636; }
         .section-title-ur { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 24px; color: #201F1F; }
-
         .posts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 10px 15px; }
         .post-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
         .post-card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 5px; background: #eee; border: 1px solid #ddd; }
         .post-info { padding: 8px 0; text-align: right; }
         .post-title { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 22px; color: #000; line-height: 1.3; }
         .post-date { font-size: 12px; color: #666; font-family: Arial; text-align: left; margin-top: 4px; display: block; }
-
         .section-divider { width: 92%; height: 1.5px; background: #cecece; margin: 20px auto; }
         .view-more-container { display: flex; justify-content: center; margin-top: 10px; margin-bottom: 25px; }
-        .view-more-btn {
-            background: #7E816F; color: #FFFFFF; border: none; border-radius: 4px;
-            padding: 4px 25px; font-family: 'Times New Roman', serif; font-size: 18px; cursor: pointer;
-        }
-
-        /* --- 6. SIDEBAR & SEARCH DROP --- */
-        .side-menu { 
-            position: fixed; top: 130px; right: -300px; width: 272px; 
-            background: rgba(231, 235, 214, 0.95); border: 1px solid #CACCC4; 
-            border-radius: 0 0 0 10px; z-index: 100; transition: 0.4s ease; 
-            display: flex; flex-direction: column; padding-bottom: 10px; 
-        }
+        .view-more-btn { background: #7E816F; color: #FFFFFF; border: none; border-radius: 4px; padding: 4px 25px; font-family: 'Times New Roman', serif; font-size: 18px; cursor: pointer; }
+        .side-menu { position: fixed; top: 130px; right: -300px; width: 272px; background: rgba(231, 235, 214, 0.95); border: 1px solid #CACCC4; border-radius: 0 0 0 10px; z-index: 100; transition: 0.4s ease; display: flex; flex-direction: column; padding-bottom: 10px; }
         .side-menu.open { right: 0; }
         .menu-header-row { width: 100%; display: flex; justify-content: flex-end; padding: 10px 15px; direction: ltr; }
         .close-btn { cursor: pointer; }
@@ -106,20 +53,14 @@
         .menu-divider { height: 1px; background: rgba(0, 0, 0, 0.1); margin: 2px 20px; }
         .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 90; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.show { opacity: 1; visibility: visible; }
-
         .search-wrapper { position: relative; flex-grow: 1; }
-        .search-dropdown {
-            position: absolute; top: 100%; left: 0; width: 100%; background: #FFFFFF; border: 1px solid #CACCC4;
-            border-top: none; border-radius: 0 0 5px 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-            z-index: 2000; display: none; max-height: 300px; overflow-y: auto;
-        }
+        .search-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: #FFFFFF; border: 1px solid #CACCC4; border-top: none; border-radius: 0 0 5px 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 2000; display: none; max-height: 300px; overflow-y: auto; }
         .dropdown-item { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; border-bottom: 1px solid #f0f0f0; }
         .item-title-ur { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 18px; color: #444A25; text-align: right; }
         .item-category-en { font-family: Arial, sans-serif; font-size: 12px; color: #82733B; text-transform: uppercase; }
     </style>
 </head>
 <body>
-
     <header class="main-header">
         <div class="brand-bar">
             <div class="brand-logo-container" onclick="location.href='index.html'">
@@ -163,44 +104,28 @@
     </section>
 
     <section class="category-section" id="articles-section">
-        <div class="section-header-row">
-            <h2 class="section-title-en">Articles</h2>
-            <h2 class="section-title-ur">مضامین</h2>
-        </div>
+        <div class="section-header-row"><h2 class="section-title-en">Articles</h2><h2 class="section-title-ur">مضامین</h2></div>
         <div class="posts-grid" id="articles-container"></div>
         <div class="view-more-container"><button class="view-more-btn" onclick="location.href='category.html?type=article'">مزید ...</button></div>
         <div class="section-divider"></div>
     </section>
 
     <section class="category-section" id="humor-section">
-        <div class="section-header-row">
-            <h2 class="section-title-en">Humor</h2>
-            <h2 class="section-title-ur">طنز و مزاح</h2>
-        </div>
+        <div class="section-header-row"><h2 class="section-title-en">Humor</h2><h2 class="section-title-ur">طنز و مزاح</h2></div>
         <div class="posts-grid" id="humor-container"></div>
         <div class="view-more-container"><button class="view-more-btn" onclick="location.href='category.html?type=humor'">مزید ...</button></div>
         <div class="section-divider"></div>
     </section>
 
     <section class="category-section" id="alfaz-section" style="padding-bottom: 40px;">
-        <div class="section-header-row">
-            <h2 class="section-title-en">Alfaz ki Baatein</h2>
-            <h2 class="section-title-ur">الفاظ کی دنیا</h2>
-        </div>
+        <div class="section-header-row"><h2 class="section-title-en">Alfaz ki Baatein</h2><h2 class="section-title-ur">الفاظ کی دنیا</h2></div>
         <div class="posts-grid" id="alfaz-container"></div>
         <div class="view-more-container"><button class="view-more-btn" onclick="location.href='category.html?type=audio'">مزید ...</button></div>
     </section>
 
     <div id="menu-overlay" class="menu-overlay"></div>
     <div id="side-menu" class="side-menu">
-        <div class="menu-header-row">
-            <div id="close-menu-btn" class="close-btn">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/>
-                    <path d="M6 6L18 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            </div>
-        </div>
+        <div class="menu-header-row"><div id="close-menu-btn" class="close-btn"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/><path d="M6 6L18 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/></svg></div></div>
         <div class="menu-content" id="dynamic-side-menu"></div>
     </div>
 
@@ -213,28 +138,29 @@
 
         async function loadPosts() {
             try {
-                const res = await fetch('/api/posts');
+                // FIXED: Added 'fetch' and API_BASE_URL prefix
+                const res = await fetch(`${API_BASE_URL}/api/posts`);
                 const posts = await res.json();
                 const visiblePosts = posts.filter(p => !p.isHidden);
                 const sorted = visiblePosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 const renderCard = (post) => {
                     const cat = post.category.toLowerCase();
-                    // SMART REDIRECT: Redirect based on category name
                     const target = (cat.includes('photo') || cat.includes('تصویر')) ? 'photo-view.html' : 'view.html';
                     
                     let displayImg = post.thumbnailUrl;
                     if (!displayImg) {
-                        if (Array.isArray(post.imageUrl) && post.imageUrl.length > 0) {
-                            displayImg = post.imageUrl[0];
-                        } else {
-                            displayImg = post.imageUrl || '/assets/images/Header Title.png';
-                        }
+                        displayImg = (Array.isArray(post.imageUrl) && post.imageUrl.length > 0) ? post.imageUrl[0] : post.imageUrl;
                     }
+
+                    // FIXED: Handle Railway path vs Local Assets
+                    const finalImg = (displayImg && displayImg.startsWith('/assets/uploads')) 
+                        ? `${API_BASE_URL}${displayImg}` 
+                        : (displayImg || '/assets/images/Header Title.png');
 
                     return `
                         <a href="${target}?id=${post._id}" class="post-card">
-                            <img src="${displayImg}" class="post-card-img" onerror="this.src='/assets/images/Header Title.png';">
+                            <img src="${finalImg}" class="post-card-img" onerror="this.src='/assets/images/Header Title.png';">
                             <div class="post-info">
                                 <h3 class="post-title">${post.title}</h3>
                                 <p class="post-date">${post.date}</p>
@@ -253,7 +179,8 @@
 
         async function syncSidebar() {
             try {
-                const res = await fetch('/api/categories');
+                // FIXED: Added 'fetch' and API_BASE_URL
+                const res = await fetch(`${API_BASE_URL}/api/categories`);
                 const categories = await res.json();
                 const sideContainer = document.getElementById('dynamic-side-menu');
                 if (!sideContainer) return;
@@ -282,7 +209,8 @@
             searchInput.oninput = async (e) => {
                 const k = e.target.value.trim();
                 if (k.length < 2) { dropdown.style.display = 'none'; return; }
-                const res = await fetch(`/api/posts?search=${encodeURIComponent(k)}`);
+                // FIXED: Added 'fetch' and API_BASE_URL
+                const res = await fetch(`${API_BASE_URL}/api/posts?search=${encodeURIComponent(k)}`);
                 const posts = await res.json();
                 if (posts.length) {
                     dropdown.innerHTML = posts.map(p => {
