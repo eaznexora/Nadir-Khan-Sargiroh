@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Nadir Khan Sargiroh</title>
+    <style>
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f4f4f4; font-family: 'Trebuchet MS', sans-serif; overflow-x: hidden; }
+
+        /* --- HEADER STYLES --- */
+        .main-header { position: relative; z-index: 10; background: transparent; }
+        .brand-bar {
+            background: #A1A58F; width: 100%; height: 120px;
+            padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
+        }
+        .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
+        .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
+        .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
+        .brand-subtitle {
+            font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
+            text-align: center; text-transform: uppercase; color: #000; text-shadow: 0px 2px 3px #A9B37C;
+        }
+        .header-mid-border { width: 100%; height: 5px; background: #616357; }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            background: #DDD0EA; width: 100%; display: flex; flex-direction: column;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+        .nav-search-row {
+            display: flex; width: 100%; justify-content: space-between; align-items: center; 
+            padding: 5px 16px; height: 50px; direction: ltr; gap: 15px;
+        }
+        .search-container {
+            display: flex; align-items: center; background: #FFFFFF; border-radius: 5px;
+            height: 30px; flex-grow: 1; overflow: hidden;
+        }
+        .search-input { width: 100%; border: none; outline: none; padding: 0 10px; font-family: 'Jameel Noori Nastaleeq', serif; text-align: right; font-size: 14px; }
+        .search-btn { background: #7E816F; border: none; width: 35px; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .nav-icon { width: 30px; height: 30px; cursor: pointer; }
+
+        .urdu-nav-links {
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 8px 10px; border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        .urdu-nav-links a {
+            text-decoration: none; color: #4b2c61; font-family: 'Jameel Noori Nastaleeq', serif;
+            font-size: 18px; font-weight: bold;
+        }
+
+        /* --- ACTION BAR --- */
+        .action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 16px; background: white; border-bottom: 1px solid #eee; direction: ltr;
+        }
+        .social-group { display: flex; gap: 15px; align-items: center; }
+        .action-icon { width: 30px; cursor: pointer; transition: 0.2s; }
+
+        /* --- PHOTO SLIDER --- */
+        .view-container { max-width: 800px; margin: 20px auto; background: white; padding: 15px; border-radius: 8px; direction: rtl; }
+        .slider-box { 
+            position: relative; width: 100%; aspect-ratio: 1/1; 
+            background: #000; overflow: hidden; border-radius: 5px; 
+            touch-action: pan-y; 
+        }
+        .slider-wrapper { display: flex; height: 100%; transition: transform 0.4s ease-out; direction: ltr; }
+        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .slide img { width: 100%; height: 100%; object-fit: contain; }
+
+        .slider-counter {
+            position: absolute; top: 15px; right: 15px; 
+            background: rgba(0, 0, 0, 0.6); color: white;
+            padding: 5px 12px; border-radius: 20px; font-family: Arial; font-size: 14px;
+            z-index: 5; direction: ltr;
+        }
+        .dots { display: flex; justify-content: center; gap: 8px; margin-top: 15px; direction: ltr; }
+        .dot { height: 10px; width: 10px; background: #ccc; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: #444A25; width: 30px; border-radius: 5px; }
+
+        /* --- INFO STYLES --- */
+        .info { margin-top: 20px; text-align: right; width: 100%; }
+        .title-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .post-full-title { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 30px; color: #000; }
+        .post-full-date { font-family: Arial; font-size: 14px; color: #666; direction: ltr; }
+        .post-full-content { 
+            font-family: 'Jameel Noori Nastaleeq', serif; font-size: 22px; line-height: 1.8; color: #333;
+            white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; 
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .side-menu {
+            position: fixed; top: 130px; right: -300px; width: 272px;
+            background: rgba(231, 235, 214, 0.95); border: 1px solid #CACCC4;
+            border-radius: 0 0 0 10px; z-index: 3000; transition: right 0.4s ease-in-out;
+            box-shadow: -2px 5px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding-bottom: 10px;
+        }
+        .side-menu.open { right: 0; }
+        .menu-header-row { width: 100%; display: flex; justify-content: flex-end; padding: 10px 15px; direction: ltr; }
+        .close-btn { cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 20px; text-decoration: none; transition: background 0.2s; direction: ltr; }
+        .text-en { font-family: 'Times New Roman', serif; font-size: 24px; }
+        .text-ur { font-family: 'Times New Roman', serif; font-size: 24px; font-weight: 700; text-align: right; }
+        .color-green { color: #444A25; }
+        .color-gold { color: #82733B; }
+        .menu-divider { height: 1px; background: rgba(0, 0, 0, 0.16); margin: 2px 20px; }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2500; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay.show { opacity: 1; visibility: visible; }
+        .search-wrapper { position: relative; flex-grow: 1; }
+        .search-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: #FFFFFF; border: 1px solid #CACCC4; border-top: none; border-radius: 0 0 5px 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 3500; display: none; max-height: 300px; overflow-y: auto; text-align: right; }
+        .dropdown-item { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; border-bottom: 1px solid #f0f0f0; transition: background 0.2s; direction: ltr; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="brand-bar">
+            <div class="brand-logo-container" onclick="location.href='index.html'">
+                <img src="./assets/images/Header Title.png" class="header-title-img">
+            </div>
+            <div class="divider-line"></div>
+            <h1 class="brand-subtitle">NADIR KHAN SARGIROH URDU VOCABULARY</h1>
+        </div>
+        <div class="header-mid-border"></div>
+        <div class="nav-bar">
+           <div class="nav-search-row">
+                <div class="search-wrapper">
+                    <div class="search-container">
+                        <input type="text" placeholder="تلاش...." class="search-input" autocomplete="off">
+                        <button class="search-btn"><img src="./assets/icons/search.svg"></button>
+                    </div>
+                    <div id="search-results-dropdown" class="search-dropdown"></div>
+                </div> 
+                <img src="./assets/icons/menu.svg" class="nav-icon" id="menu-btn">
+            </div> 
+            <div class="urdu-nav-links">
+                <a href="category.html?type=article">مضامین</a>
+                <a href="category.html?type=audio">الفاظ کی دنیا</a>
+                <a href="category.html?type=humor">طنز و مزاح</a>
+                <a href="category.html?type=video">ویڈیوز</a>
+                <a href="javascript:void(0)" onclick="toggleMenu()">مزید...</a>
+            </div>
+        </div>
+        <div class="action-bar">
+            <img src="./assets/icons/Back.svg" class="action-icon" onclick="history.back()">
+            <div class="social-group">
+                <img src="./assets/icons/whatsapp.svg" class="action-icon" onclick="shareTo('whatsapp')">
+                <img src="./assets/icons/facebook.svg" class="action-icon" onclick="shareTo('facebook')">
+                <img src="./assets/icons/share.svg" class="action-icon" onclick="nativeShare()">
+            </div>
+        </div>
+    </header>
+    
+    <main class="view-container" id="gallery-root">
+        <div style="text-align: center; padding: 100px;">لوڈ ہو رہا ہے...</div>
+    </main>
+
+    <div id="side-menu" class="side-menu">
+        <div class="menu-header-row">
+            <div id="close-menu-btn" class="close-btn">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/><path d="M6 6L18 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+        </div>
+        <div class="menu-content" id="dynamic-side-menu"></div>
+    </div>
+    <div id="menu-overlay" class="menu-overlay"></div>
+
+    <script>
+    let currentIdx = 0, total = 0, startX = 0;
+
+    // 1. Sidebar Sync - Correctly pulls categories from DB
+    async function syncSidebar() {
+        try {
+            const res = await fetch('/api/categories');
+            const categories = await res.json();
+            const sideContainer = document.getElementById('dynamic-side-menu');
+            
+            let menuHTML = `<a href="index.html" class="menu-item"><span class="text-en color-green">Home</span><span class="text-ur color-green">سَر وَرَق</span></a><div class="menu-divider"></div>`;
+            
+            menuHTML += categories.map((cat, index) => {
+                const colorClass = index % 2 === 0 ? 'color-gold' : 'color-green';
+                return `
+                    <a href="category.html?type=${cat.nameEn}" class="menu-item">
+                        <span class="text-en ${colorClass}">${cat.nameEn.charAt(0).toUpperCase() + cat.nameEn.slice(1)}</span>
+                        <span class="text-ur ${colorClass}">${cat.nameUr}</span>
+                    </a>
+                    <div class="menu-divider"></div>`;
+            }).join('');
+            sideContainer.innerHTML = menuHTML;
+        } catch (err) { console.error("Sidebar sync failed", err); }
+    }
+
+    // 2. Initialize Gallery Logic - Fixed Pathing and Syntax
+   async function initGallery() {
+    try {
+        const id = new URLSearchParams(window.location.search).get('id');
+        const res = await fetch(`/api/posts/${id}`);
+        const post = await res.json();
+        
+        console.log("RAW DATABASE DATA:", post.imageUrl); // Check your F12 console for this!
+
+        // NUCLEAR PATH CLEANER: Strips everything and forces the working folder
+        const nuclearFix = (path) => {
+            if (!path) return '/assets/images/Header Title.png';
+            // 1. Get just the filename (e.g., 'image.jpg')
+            const parts = path.split(/[\\\/]/); 
+            const fileName = parts[parts.length - 1];
+            // 2. Force the exact path that worked in your manual URL test
+            return `/assets/uploads/${fileName}`; 
+        };
+
+        // Apply fix to arrays or single strings
+        const imgArray = Array.isArray(post.imageUrl) 
+            ? post.imageUrl.map(nuclearFix) 
+            : [nuclearFix(post.imageUrl)];
+        
+        total = imgArray.length;
+
+        // Build HTML
+        let slides = imgArray.map(src => `
+            <div class="slide">
+                <img src="${src}" onerror="this.src='/assets/images/Header Title.png'; console.log('Failed to load:', this.src)">
+            </div>`).join('');
+            
+        let dots = imgArray.map((_, i) => `<div class="dot ${i===0?'active':''}"></div>`).join('');
+
+        document.getElementById('gallery-root').innerHTML = `
+            <div class="slider-box" id="slider">
+                <div class="slider-counter" id="slider-count">1 / ${total}</div>
+                <div class="slider-wrapper" id="wrapper">${slides}</div>
+            </div>
+            <div class="dots">${dots}</div>
+            <div class="info">
+                <div class="title-header">
+                    <h1 class="post-full-title">${post.title}</h1>
+                    <span class="post-full-date">${post.date}</span>
+                </div>
+                <div class="post-full-content">${post.content}</div>
+            </div>`;
+
+        // Reset slider events
+        const slider = document.getElementById('slider');
+        slider.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive: true});
+        slider.addEventListener('touchend', e => {
+            let diff = startX - e.changedTouches[0].clientX;
+            if(Math.abs(diff) > 50) moveSlide(diff > 0 ? 1 : -1);
+        }, {passive: true});
+
+    } catch (e) {
+        console.error("Gallery Crash:", e);
+    }
+}
+
+    function moveSlide(dir) {
+        let nextIdx = currentIdx + dir;
+        if (nextIdx < 0 || nextIdx >= total) return;
+        currentIdx = nextIdx;
+        document.getElementById('wrapper').style.transform = `translateX(-${currentIdx * 100}%)`; 
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+        document.getElementById('slider-count').innerText = `${currentIdx + 1} / ${total}`;
+    }
+
+    function toggleMenu() {
+        document.getElementById('side-menu').classList.toggle('open');
+        document.getElementById('menu-overlay').classList.toggle('show');
+    }
+
+    function handleSearch() {
+        const keyword = document.querySelector('.search-input').value.trim();
+        if (keyword) window.location.href = `category.html?search=${encodeURIComponent(keyword)}`;
+    }
+
+    function shareTo(platform) {
+        const url = window.location.href;
+        const text = document.querySelector('.post-full-title')?.innerText || "Nadir Khan Sargiroh";
+        if (platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`);
+        if (platform === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+    }
+
+    async function nativeShare() {
+        try { await navigator.share({ title: document.querySelector('.post-full-title')?.innerText, url: window.location.href }); } 
+        catch (err) { console.log("Share cancelled"); }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        syncSidebar();
+        initGallery();
+
+        // Menu Handlers
+        document.getElementById('menu-btn').onclick = toggleMenu;
+        document.getElementById('close-menu-btn').onclick = toggleMenu;
+        document.getElementById('menu-overlay').onclick = toggleMenu;
+        document.querySelector('.search-btn').onclick = handleSearch;
+        document.querySelector('.search-input').onkeypress = (e) => { if (e.key === 'Enter') handleSearch(); };
+
+        // Live Search Logic - Corrected routing to avoid view.html/photo-view.html confusion
+        const searchInput = document.querySelector('.search-input');
+        const dropdown = document.getElementById('search-results-dropdown');
+        if (searchInput) {
+            searchInput.addEventListener('input', async (e) => {
+                const keyword = e.target.value.trim();
+                if (keyword.length < 2) { dropdown.style.display = 'none'; return; }
+                try {
+                    const res = await fetch(`/api/posts?search=${encodeURIComponent(keyword)}`);
+                    const posts = await res.json(); 
+                    if (posts && posts.length > 0) {
+                        dropdown.innerHTML = posts.map(p => {
+                            const isPhoto = p.category.toLowerCase().includes('photo');
+                            const target = isPhoto ? 'photo-view.html' : 'view.html';
+                            return `
+                                <a href="${target}?id=${p._id}" class="dropdown-item">
+                                    <span class="item-category-en">${p.category}</span>
+                                    <span class="item-title-ur">${p.title}</span>
+                                </a>`;
+                        }).join('');
+                        dropdown.style.display = 'block';
+                    } else dropdown.style.display = 'none';
+                } catch (err) { console.error(err); }
+            });
+        }
+        document.addEventListener('click', (e) => { if (searchInput && !searchInput.contains(e.target)) dropdown.style.display = 'none'; });
+    });
+</script>
+</body>
+</html>

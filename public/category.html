@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Nadir Khan Sargiroh</title>
+    <style>
+        /* --- Keep all your existing CSS exactly as it is --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f4f4f4; font-family: 'Trebuchet MS', sans-serif; overflow-x: hidden; }
+
+        .main-header { position: relative; z-index: 10; background: transparent; }
+        .brand-bar {
+            background: #A1A58F; width: 100%; height: 120px;
+            padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
+        }
+        .brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
+        .header-title-img { max-width: 90%; height: auto; object-fit: contain; }
+        .divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
+        .brand-subtitle {
+            font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
+            text-align: center; text-transform: uppercase; color: #000; text-shadow: 0px 2px 3px #A9B37C;
+        }
+        .header-mid-border { width: 100%; height: 5px; background: #616357; }
+
+        .nav-bar {
+            background: #DDD0EA; width: 100%; height: 50px;
+            display: flex; flex-direction: row; justify-content: space-between;
+            align-items: center; padding: 5px 16px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            direction: ltr; 
+        }
+        .search-wrapper { position: relative; flex-grow: 1; margin-right: 15px; }
+        .search-container {
+            display: flex; align-items: center; background: #FFFFFF; border-radius: 5px;
+            height: 30px; overflow: hidden;
+        }
+        .search-input { width: 100%; border: none; outline: none; padding: 0 10px; font-family: 'Jameel Noori Nastaleeq', serif; text-align: right; }
+        .search-btn { background: #7E816F; border: none; width: 35px; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .nav-icon { width: 30px; height: 30px; cursor: pointer; }
+
+        .search-dropdown {
+            position: absolute; top: 100%; left: 0; width: 100%; background: #fff;
+            border: 1px solid #CACCC4; border-top: none; border-radius: 0 0 5px 5px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1); z-index: 2000; display: none;
+            max-height: 300px; overflow-y: auto; text-align: right;
+        }
+        .dropdown-item {
+            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; border-bottom: 1px solid #f0f0f0; direction: ltr;
+        }
+
+        .header-action-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 5px 16px; background: #DDD0EA; border-bottom: 2px solid rgba(0,0,0,0.1);
+            direction: ltr; height: 50px;
+        }
+        .action-left { display: flex; align-items: center; flex: 1; min-width: 0; }
+        .action-right { flex: 1; min-width: 0; text-align: center; }
+        .back-icon { width: 28px; cursor: pointer; filter: brightness(0.3); margin-right: 12px; flex-shrink: 0; }
+        .text-en-header { font-family: 'Times New Roman', serif; font-size: 20px; color: #4b2c61; font-weight: 400; }
+        .text-ur-header { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 24px; color: #4b2c61; font-weight: 700; }
+
+        .section-header-row { display: flex; justify-content: space-between; align-items: center; padding: 25px 20px 10px 20px; direction: ltr; }
+        .section-title-en { font-family: 'Times New Roman', serif; font-weight: 700; font-size: 22px; color: #3F3636; }
+        .section-title-ur { font-family: 'Times New Roman', serif; font-weight: 400; font-size: 26px; color: #201F1F; text-align: right; }
+        
+        .posts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 10px 15px; }
+        .post-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+        .post-card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 5px; background: #eee; border: 1px solid #ddd; }
+        .post-info { padding: 8px 0; text-align: right; }
+        .post-title { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 22px; color: #000; line-height: 1.3; }
+        .post-date { font-family: 'Trebuchet MS', sans-serif; font-size: 12px; color: #666; text-align: left; margin-top: 5px; display: block; }
+        .section-divider { width: 92%; height: 1.5px; background: #cecece; margin: 20px auto; }
+  
+        .side-menu {
+            position: fixed; top: 130px; right: -300px; width: 272px;
+            background: rgba(231, 235, 214, 0.95); border: 1px solid #CACCC4;
+            border-radius: 0 0 0 10px; z-index: 3000; transition: right 0.4s ease-in-out;
+            box-shadow: -2px 5px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding-bottom: 10px;
+        }
+        .side-menu.open { right: 0; }
+        .menu-header-row { width: 100%; display: flex; justify-content: flex-end; padding: 10px 15px; direction: ltr; }
+        .close-btn { cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; text-decoration: none; transition: background 0.2s; direction: ltr; }
+        .text-en { font-family: 'Times New Roman', serif; font-size: 22px; }
+        .text-ur { font-family: 'Jameel Noori Nastaleeq', serif; font-size: 22px; font-weight: 700; text-align: right; }
+        .color-green { color: #444A25; }
+        .color-gold { color: #82733B; }
+        .menu-divider { height: 1px; background: rgba(0, 0, 0, 0.16); margin: 2px 20px; }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2500; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay.show { opacity: 1; visibility: visible; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="brand-bar">
+            <div class="brand-logo-container" onclick="location.href='index.html'">
+                <img src="/assets/images/Header Title.png" class="header-title-img">
+            </div>
+            <div class="divider-line"></div>
+            <h1 class="brand-subtitle">NADIR KHAN SARGIROH URDU VOCABULARY</h1>
+        </div>
+        <div class="header-mid-border"></div>
+
+        <div class="nav-bar">
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <input type="text" placeholder="تلاش...." class="search-input" autocomplete="off">
+                    <button class="search-btn"><img src="/assets/icons/search.svg"></button>
+                </div>
+                <div id="search-results-dropdown" class="search-dropdown"></div>
+            </div>
+            <img src="/assets/icons/menu.svg" class="nav-icon" id="menu-btn">
+        </div>
+    </header>
+
+    <div class="header-action-row">
+        <div class="action-left">
+            <img src="/assets/icons/Back.svg" class="back-icon" onclick="history.back()">
+            <span id="display-name-en" class="text-en-header">Loading...</span>
+        </div>
+        <div class="action-right">
+            <span id="display-name-ur" class="text-ur-header">انتظار فرمائیں</span>
+        </div>
+    </div>
+
+    <section id="pinned-section" style="display: none;">
+        <div class="section-header-row">
+            <h2 class="section-title-en">Pinned Posts</h2>
+            <h2 class="section-title-ur">اہم تحریریں</h2>
+        </div>
+        <div class="posts-grid" id="pinned-container"></div>
+        <div class="section-divider"></div>
+    </section>
+
+    <section id="recent-section">
+        <div class="section-header-row">
+            <h2 class="section-title-en">Recent Posts</h2>
+            <h2 class="section-title-ur">تازہ بہ تازہ</h2>
+        </div>
+        <div class="posts-grid" id="category-container"></div>
+    </section>
+
+    <div id="side-menu" class="side-menu">
+        <div class="menu-header-row">
+            <div id="close-menu-btn" class="close-btn">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/><path d="M6 6L18 18" stroke="#525545" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+        </div>
+        <div class="menu-content" id="dynamic-side-menu"></div>
+    </div>
+    <div id="menu-overlay" class="menu-overlay"></div>
+
+    <script>
+        async function syncSidebar() {
+            try {
+                const res = await fetch('/api/categories');
+                const categories = await res.json();
+                const sideContainer = document.getElementById('dynamic-side-menu');
+                
+                let menuHTML = `<a href="index.html" class="menu-item"><span class="text-en color-green">Home</span><span class="text-ur color-green">سَر وَرَق</span></a><div class="menu-divider"></div>`;
+                
+                menuHTML += categories.map((cat, index) => {
+                    const colorClass = index % 2 === 0 ? 'color-gold' : 'color-green';
+                    return `
+                        <a href="category.html?type=${cat.nameEn}" class="menu-item">
+                            <span class="text-en ${colorClass}">${cat.nameEn.charAt(0).toUpperCase() + cat.nameEn.slice(1)}</span>
+                            <span class="text-ur ${colorClass}">${cat.nameUr}</span>
+                        </a>
+                        <div class="menu-divider"></div>`;
+                }).join('');
+                sideContainer.innerHTML = menuHTML;
+            } catch (err) { console.error("Sidebar sync failed", err); }
+        }
+
+        async function loadCategoryPosts() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const search = urlParams.get('search');
+            
+            if (!type && !search) { window.location.href = 'index.html'; return; }
+
+            if (type) {
+                const catRes = await fetch('/api/categories');
+                const categories = await catRes.json();
+                const currentCat = categories.find(c => c.nameEn === type.toLowerCase());
+                document.getElementById('display-name-en').innerText = type.charAt(0).toUpperCase() + type.slice(1);
+                document.getElementById('display-name-ur').innerText = currentCat ? currentCat.nameUr : type;
+            } else if (search) {
+                document.getElementById('display-name-en').innerText = `Search: ${search}`;
+                document.getElementById('display-name-ur').innerText = `نتائج برائے: ${search}`;
+            }
+
+            try {
+                const apiUrl = `/api/posts?${type ? 'type='+type : ''}${search ? (type ? '&' : '') + 'search='+encodeURIComponent(search) : ''}`;
+                const res = await fetch(apiUrl);
+                const posts = await res.json();
+                
+                const visiblePosts = posts.filter(p => !p.isHidden);
+                const pinnedPosts = visiblePosts.filter(p => p.isPinned);
+                const recentPosts = visiblePosts.filter(p => !p.isPinned);
+
+                const renderPost = (post) => {
+                    const cat = post.category.toLowerCase();
+                    // SMART REDIRECT: Ensure photo categories go to photo-view.html
+                    const target = (cat.includes('photo') || cat.includes('تصویر')) ? 'photo-view.html' : 'view.html';
+                    const img = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl) || '/assets/images/Header Title.png';
+                    return `
+                        <a href="${target}?id=${post._id}" class="post-card">
+                            <img src="${img}" class="post-card-img" onerror="this.src='/assets/images/Header Title.png';">
+                            <div class="post-info">
+                                <h3 class="post-title">${post.title}</h3>
+                                <span class="post-date">${post.date}</span>
+                            </div>
+                        </a>`;
+                };
+
+                document.getElementById('pinned-section').style.display = pinnedPosts.length ? 'block' : 'none';
+                document.getElementById('pinned-container').innerHTML = pinnedPosts.map(renderPost).join('');
+                document.getElementById('category-container').innerHTML = recentPosts.length ? recentPosts.map(renderPost).join('') : '<p style="grid-column: span 2; text-align: center; padding: 50px; font-family:\'Jameel Noori Nastaleeq\'; font-size:24px;">کوئی تحریر نہیں ملی۔</p>';
+            } catch (err) { console.error(err); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncSidebar();
+            loadCategoryPosts();
+
+            const menuBtn = document.getElementById('menu-btn'), closeBtn = document.getElementById('close-menu-btn'), sideMenu = document.getElementById('side-menu'), overlay = document.getElementById('menu-overlay');
+            function toggleMenu() { sideMenu.classList.toggle('open'); overlay.classList.toggle('show'); }
+            if(menuBtn) menuBtn.onclick = (e) => { e.stopPropagation(); toggleMenu(); };
+            if(closeBtn) closeBtn.onclick = toggleMenu;
+            if(overlay) overlay.onclick = toggleMenu;
+
+            const searchInput = document.querySelector('.search-input'), dropdown = document.getElementById('search-results-dropdown');
+            searchInput.oninput = async (e) => {
+                const k = e.target.value.trim();
+                if (k.length < 2) { dropdown.style.display = 'none'; return; }
+                const res = await fetch(`/api/posts?search=${encodeURIComponent(k)}`);
+                const p = await res.json();
+                if (p.length) {
+                    dropdown.innerHTML = p.map(post => {
+                        const cat = post.category.toLowerCase();
+                        const target = (cat.includes('photo') || cat.includes('تصویر')) ? 'photo-view.html' : 'view.html';
+                        return `<a href="${target}?id=${post._id}" class="dropdown-item"><span style="font-size:12px;color:#82733B;">${post.category}</span><span style="font-family:'Jameel Noori Nastaleeq';">${post.title}</span></a>`;
+                    }).join('');
+                    dropdown.style.display = 'block';
+                } else dropdown.style.display = 'none';
+            };
+            document.querySelector('.search-btn').onclick = () => { if(searchInput.value) location.href = `category.html?search=${encodeURIComponent(searchInput.value)}`; };
+            searchInput.onkeypress = (e) => { if (e.key === 'Enter') document.querySelector('.search-btn').click(); };
+        });
+    </script>
+</body>
+</html>

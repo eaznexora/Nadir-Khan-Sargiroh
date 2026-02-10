@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload/Edit Post | Nadir Khan</title>
+    <style>
+        /* --- 1. BASE STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #fff; font-family: 'Times New Roman', serif; padding-bottom: 50px; }
+
+        .admin-header { text-align: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .admin-header h1 { font-size: 22px; font-weight: bold; }
+
+        .form-top-bar { background: #444A25; color: white; padding: 10px 15px; text-align: center; font-size: 18px; font-weight: bold; }
+
+        .form-container { padding: 15px; max-width: 500px; margin: 0 auto; }
+
+        /* --- 2. CATEGORY SELECTOR --- */
+        .field-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .field-label { font-size: 18px; color: #333; }
+        select { border: none; font-size: 18px; outline: none; background: transparent; cursor: pointer; color: #444A25; font-weight: bold; }
+
+        /* --- 3. MEDIA PREVIEW (MATCHES DESIGN) --- */
+        .media-preview-container { width: 100%; aspect-ratio: 1/1; border: 1px solid #ddd; position: relative; background: #f9f9f9; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .media-actions { display: flex; justify-content: flex-end; gap: 15px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .media-actions img { width: 22px; height: 22px; cursor: pointer; }
+
+        /* --- 4. PLAYER/FILE BOX (AUDIO/VIDEO) --- */
+        .file-box { border: 1px solid #ddd; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 10px; margin-top: 10px; background: #fff; display: none; }
+        .file-icon-box { width: 40px; height: 40px; background: #FFEBB7; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+        .file-name { flex: 1; font-family: Arial; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* --- 5. TEXT INPUTS (RTL FOR URDU) --- */
+        .text-input-wrapper { direction: rtl; text-align: right; margin-top: 15px; }
+        .edit-icon { width: 16px; margin-left: 8px; opacity: 0.5; }
+        
+        .title-input { width: 100%; border: none; font-size: 26px; font-weight: bold; font-family: 'Jameel Noori Nastaleeq', serif; outline: none; margin-bottom: 5px; background: transparent; }
+        .date-display { font-size: 12px; color: #666; font-family: Arial; margin-bottom: 15px; display: block; text-align: left; direction: ltr; }
+        .content-area { width: 100%; min-height: 250px; border: none; font-size: 20px; font-family: 'Jameel Noori Nastaleeq', serif; outline: none; resize: none; line-height: 1.6; background: transparent; }
+
+        /* --- 6. PHOTO GALLERY TRIGGER --- */
+        .add-more-photos { display: none; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; color: #000; margin-top: 10px; font-size: 18px; }
+
+        /* --- 7. BUTTONS --- */
+        .btn-stack { margin-top: 30px; display: flex; flex-direction: column; gap: 12px; }
+        .btn { border: none; border-radius: 8px; padding: 14px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-add { background: #89AC4E; color: white; }
+        .btn-cancel { background: #C1C1C1; color: #555; }
+        .btn:active { transform: scale(0.98); }
+
+        input[type="file"] { display: none; }
+
+        /* --- HEADER STYLES --- */
+.main-header { position: relative; z-index: 10; background: transparent; }
+.brand-bar {
+    background: #A1A58F; width: 100%; height: 120px;
+    padding: 10px 0; display: flex; flex-direction: column; align-items: center; position: relative;
+}
+.brand-logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 2px; cursor: pointer; }
+.header-title-img { max-width: 90%; height: auto; object-fit: contain; }
+.divider-line { width: 90%; height: 1px; background: #818472; border: 1px solid #818472; margin: 5px auto; }
+.brand-subtitle {
+    font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 19px;
+    text-align: center; text-transform: uppercase; color: #000000;
+    text-shadow: 0px 2px 3px #A9B37C; margin-bottom: 5px;
+}
+.header-mid-border { width: 100%; height: 5px; background: #616357; }
+
+/* --- NAVIGATION --- */
+.nav-bar {
+    background: #DDD0EA; width: 100%; display: flex; flex-direction: column;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.nav-top-row {
+    display: flex; width: 100%; justify-content: space-between; align-items: center; 
+    padding: 5px 16px; height: 50px; direction: ltr; 
+}
+.nav-title-admin { font-family: 'Times New Roman', serif; font-weight: 700; color: #4b2c61; font-size: 18px; }
+.nav-icon { width: 30px; height: 30px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="brand-bar">
+        <div class="brand-logo-container" onclick="location.href='admin-index.html'">
+            <img src="/assets/images/Header Title.png" class="header-title-img">
+        </div>
+        <div class="divider-line"></div>
+        <h1 class="brand-subtitle">NADIR KHAN SARGIROH URDU VOCABULARY</h1>
+    </div>
+    <div class="header-mid-border"></div>
+    <div class="nav-bar">
+        <div class="nav-top-row">
+            <img src="/assets/icons/Back.svg" class="nav-icon" onclick="location.href='admin-index.html'" title="Visit Site">
+            <span class="nav-title-admin">ADMINISTRATOR PANEL</span>
+            <img src="/assets/icons/Logout.svg" class="nav-icon" onclick="location.href='/api/logout'" title="Logout">
+        </div>
+    </div>
+</header>
+
+    <div class="admin-header"><h1>Administrator Panel</h1></div>
+    <div id="page-title" class="form-top-bar">Upload a Post</div>
+
+    <div class="form-container">
+        <div class="field-group">
+            <span class="field-label">Category</span>
+            <select id="category-select" onchange="adaptUI()">
+                </select>
+        </div>
+
+        <div class="media-preview-container" onclick="document.getElementById('thumb-input').click()">
+            <img id="main-preview" src="/assets/images/placeholder.png" class="preview-img">
+        </div>
+        
+        <div class="media-actions">
+            <span id="thumb-label" style="flex:1; font-family:Arial; font-size:14px; color:#777;">Thumbnail</span>
+            <img src="/assets/icons/pin-outline.svg" id="pin-btn" onclick="togglePin()" title="Pin to top">
+            <img src="/assets/icons/delete.svg" onclick="resetMedia()" title="Clear Image">
+            <img src="/assets/icons/edit.svg" onclick="document.getElementById('thumb-input').click()" title="Change Image">
+        </div>
+
+        <input type="file" id="thumb-input" accept="image/*" onchange="previewMedia(this, 'main-preview')">
+        <input type="file" id="media-file-input" onchange="handleFileSelected(this)">
+        <input type="file" id="gallery-input" multiple accept="image/*" onchange="handleGallerySelected(this)">
+
+        <div id="file-display-box" class="file-box">
+            <div class="file-icon-box"><img src="/assets/icons/audio-file.svg" width="20"></div>
+            <span id="selected-file-name" class="file-name">no-file-selected.mp3</span>
+            <img src="/assets/icons/delete.svg" style="width:18px; cursor:pointer;" onclick="resetFile()">
+            <img src="/assets/icons/edit.svg" style="width:18px; cursor:pointer;" onclick="document.getElementById('media-file-input').click()">
+        </div>
+
+        <div id="gallery-trigger" class="add-more-photos" onclick="document.getElementById('gallery-input').click()">
+            <span style="font-size: 24px;">+</span> Add more Photos
+        </div>
+
+        <div class="text-input-wrapper">
+            <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <img src="/assets/icons/edit.svg" class="edit-icon">
+                <input type="text" id="post-title" class="title-input" placeholder="عنوان یہاں لکھیں">
+            </div>
+            
+            <span id="current-date" class="date-display">February 10, 2026</span>
+            
+            <div style="display:flex; justify-content:flex-end; align-items: flex-start;">
+                <img src="/assets/icons/edit.svg" class="edit-icon" style="margin-top: 10px;">
+                <textarea id="post-content" class="content-area" placeholder="تحریر یہاں لکھیں..."></textarea>
+            </div>
+        </div>
+
+        <div class="btn-stack">
+            <button class="btn btn-add" id="submit-btn" onclick="submitForm()">Add Post</button>
+            <button class="btn btn-cancel" onclick="location.href='admin-index.html'">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let isPinned = false;
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('id');
+        const defaultCat = urlParams.get('type');
+
+        async function initForm() {
+            // 1. Fetch Dynamic Categories
+            try {
+                const catRes = await fetch('/api/categories');
+                const categories = await catRes.json();
+                const select = document.getElementById('category-select');
+                
+                select.innerHTML = categories.map(c => 
+                    `<option value="${c.nameEn}" ${defaultCat === c.nameEn ? 'selected' : ''}>${c.nameEn.charAt(0).toUpperCase() + c.nameEn.slice(1)}</option>`
+                ).join('');
+            } catch (err) { console.error("Could not load categories", err); }
+
+            // 2. Set Today's Date
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+            // 3. Handle Edit Mode
+            if (editId) {
+                document.getElementById('page-title').innerText = "Edit Post";
+                document.getElementById('submit-btn').innerText = "Update Post";
+                const postRes = await fetch(`/api/posts/${editId}`);
+                const post = await postRes.json();
+                fillFormData(post);
+            }
+            
+            adaptUI();
+        }
+
+        // The "Chameleon" Logic: Identifies Player/Layout type
+        function adaptUI() {
+            const cat = document.getElementById('category-select').value.toLowerCase();
+            const fileBox = document.getElementById('file-display-box');
+            const galleryLink = document.getElementById('gallery-trigger');
+            const thumbLabel = document.getElementById('thumb-label');
+
+            // Keywords to identify media types
+            const isPhoto = cat.includes('photo') || cat.includes('تصویر');
+            const isMedia = cat.includes('audio') || cat.includes('video') || cat.includes('آواز') || cat.includes('ویڈیو');
+
+            fileBox.style.display = isMedia ? "flex" : "none";
+            galleryLink.style.display = isPhoto ? "flex" : "none";
+            thumbLabel.innerText = isPhoto ? "Cover Photo" : "Thumbnail";
+        }
+
+        function previewMedia(input, targetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => document.getElementById(targetId).src = e.target.result;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handleFileSelected(input) {
+            if (input.files[0]) {
+                document.getElementById('selected-file-name').innerText = input.files[0].name;
+            }
+        }
+
+        function handleGallerySelected(input) {
+            if (input.files.length > 0) {
+                document.getElementById('gallery-trigger').innerText = `+ ${input.files.length} Photos Selected`;
+            }
+        }
+
+        function togglePin() {
+            isPinned = !isPinned;
+            document.getElementById('pin-btn').src = `/assets/icons/${isPinned ? 'pin-active.svg' : 'pin-outline.svg'}`;
+        }
+
+        function resetMedia() {
+            document.getElementById('main-preview').src = "/assets/images/placeholder.png";
+            document.getElementById('thumb-input').value = "";
+        }
+
+        function resetFile() {
+            document.getElementById('media-file-input').value = "";
+            document.getElementById('selected-file-name').innerText = "no-file-selected.mp3";
+        }
+
+        async function submitForm() {
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('post-title').value);
+            formData.append('content', document.getElementById('post-content').value);
+            formData.append('category', document.getElementById('category-select').value);
+            formData.append('isPinned', isPinned);
+
+            // Handle Files
+            const thumbFile = document.getElementById('thumb-input').files[0];
+            if (thumbFile) formData.append('thumbnail', thumbFile);
+
+            const mediaFile = document.getElementById('media-file-input').files[0];
+            if (mediaFile) formData.append('file', mediaFile);
+
+            const galleryFiles = document.getElementById('gallery-input').files;
+            for (let i = 0; i < galleryFiles.length; i++) {
+                formData.append('files', galleryFiles[i]);
+            }
+
+            const method = editId ? 'PUT' : 'POST';
+            const url = editId ? `/api/posts/${editId}` : '/api/posts';
+
+            try {
+                const res = await fetch(url, { method, body: formData });
+                if (res.ok) {
+                    location.href = 'admin-index.html';
+                } else {
+                    alert("Submission failed. Check your connection.");
+                    btn.disabled = false;
+                    btn.innerText = editId ? "Update Post" : "Add Post";
+                }
+            } catch (err) {
+                console.error(err);
+                btn.disabled = false;
+            }
+        }
+
+        function fillFormData(post) {
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-content').value = post.content;
+            document.getElementById('category-select').value = post.category;
+            document.getElementById('main-preview').src = post.thumbnailUrl || (Array.isArray(post.imageUrl) ? post.imageUrl[0] : post.imageUrl);
+            if (post.isPinned) {
+                isPinned = true;
+                document.getElementById('pin-btn').src = "/assets/icons/pin-active.svg";
+            }
+        }
+
+        initForm();
+    </script>
+</body>
+</html>
