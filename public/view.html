@@ -175,10 +175,12 @@
                 
                 menuHTML += categories.map((cat, index) => {
                     const colorClass = index % 2 === 0 ? 'color-gold' : 'color-green';
+                    const nameEn = typeof cat === 'object' ? cat.nameEn : cat;
+                    const nameUr = typeof cat === 'object' ? cat.nameUr : cat;
                     return `
-                        <a href="category.html?type=${cat.nameEn}" class="menu-item">
-                            <span class="text-en ${colorClass}">${cat.nameEn.charAt(0).toUpperCase() + cat.nameEn.slice(1)}</span>
-                            <span class="text-ur ${colorClass}">${cat.nameUr}</span>
+                        <a href="category.html?type=${nameEn}" class="menu-item">
+                            <span class="text-en ${colorClass}">${nameEn.charAt(0).toUpperCase() + nameEn.slice(1)}</span>
+                            <span class="text-ur ${colorClass}">${nameUr}</span>
                         </a>
                         <div class="menu-divider"></div>`;
                 }).join('');
@@ -188,61 +190,64 @@
 
         // 2. Content Player Logic
         async function loadContent() {
-    try {
-        const id = new URLSearchParams(window.location.search).get('id');
-        const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
-        const post = await res.json();
-        const container = document.getElementById('post-view-content');
+            try {
+                const id = new URLSearchParams(window.location.search).get('id');
+                const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
+                const post = await res.json();
+                const container = document.getElementById('post-view-content');
 
-        // Helper to ensure media path is absolute
-        const getMediaPath = (path) => (path && path.startsWith('/assets/uploads')) ? `${API_BASE_URL}${path}` : path;
+                const getMediaPath = (path) => (path && path.startsWith('/assets/uploads')) ? `${API_BASE_URL}${path}` : path;
 
-        let mediaHtml = '';
-        const cat = post.category.toLowerCase();
-        const mainMedia = getMediaPath(post.imageUrl);
-        
-        // 1. Video Player Logic
-        if (cat.includes('video') || cat.includes('ویڈیو')) {
-    mediaHtml = `
-        <div class="media-wrapper">
-            <video 
-                src="${mainMedia}" 
-                controls 
-                autoplay 
-                loop 
-                controlsList="nodownload" 
-                oncontextmenu="return false;" 
-                style="width:100%; border-radius:8px;">
-            </video>
-        </div>`;
-} 
-        // 2. Audio Player Logic
-        else if (cat.includes('audio') || cat.includes('آواز')) {
-            const cover = getMediaPath(post.thumbnailUrl) || '/assets/images/Header Title.png';
-            mediaHtml = `
-                <div class="audio-box" style="background: #E7EBD6; padding: 20px; border-radius: 12px; text-align: center;">
-                    <img src="${cover}" class="audio-cover" style="width:100%; max-width:350px; border-radius:10px; margin-bottom:15px;" onerror="this.src='/assets/images/Header Title.png'">
-                    <audio src="${mainMedia}" controls controlsList="nodownload" oncontextmenu="return false;" style="width:100%"></audio>
-                </div>`;
-        } 
-        else {
-            mediaHtml = `<img src="${mainMedia}" style="width:100%; border-radius:5px; margin-bottom:20px;" onerror="this.style.display='none'">`;
+                let mediaHtml = '';
+                
+                let cat = "";
+                if (post.category) {
+                    cat = (typeof post.category === 'object' ? post.category.nameEn : post.category).toLowerCase();
+                }
+
+                const fileUrl = (post.imageUrl || "").toLowerCase();
+                const mainMedia = getMediaPath(post.imageUrl);
+
+                // Added nodownload and disabled right-click context menu
+                if (cat.includes('video') || fileUrl.match(/\.(mp4|webm|mov)$/)) {
+                    mediaHtml = `
+                        <div class="media-wrapper">
+                            <video src="${mainMedia}" controls controlsList="nodownload" oncontextmenu="return false;" autoplay loop style="width:100%; border-radius:8px;"></video>
+                        </div>`;
+                } 
+                else if (cat.includes('audio') || cat.includes('آواز') || fileUrl.match(/\.(mp3|wav|m4a)$/)) {
+                    const cover = getMediaPath(post.thumbnailUrl) || './assets/images/Header Title.png';
+                    mediaHtml = `
+                        <div class="audio-box" style="background: #E7EBD6; padding: 20px; border-radius: 12px; text-align: center;">
+                            <img src="${cover}" style="width:100%; max-width:350px; border-radius:10px; margin-bottom:15px;" onerror="this.src='./assets/images/Header Title.png'">
+                            <audio src="${mainMedia}" controls controlsList="nodownload" oncontextmenu="return false;" style="width:100%"></audio>
+                        </div>`;
+                } 
+                else {
+                    let displayImg = post.thumbnailUrl;
+                    if (!displayImg) {
+                        displayImg = (Array.isArray(post.imageUrl) && post.imageUrl.length > 0) ? post.imageUrl[0] : post.imageUrl;
+                    }
+                    const finalImg = getMediaPath(displayImg);
+                    if (finalImg) {
+                        mediaHtml = `<img src="${finalImg}" style="width:100%; border-radius:5px; margin-bottom:20px;" onerror="this.style.display='none'">`;
+                    }
+                }
+
+                container.innerHTML = `
+                    ${mediaHtml}
+                    <div class="title-header">
+                        <h1 class="post-full-title">${post.title || ''}</h1>
+                        <span class="post-full-date">${post.date || ''}</span>
+                    </div>
+                    <div class="post-full-content">${post.content || ''}</div>
+                `;
+            } catch (err) {
+                console.error("Content load failed", err);
+            }
         }
 
-        container.innerHTML = `
-            ${mediaHtml}
-            <div class="title-header" style="margin-top:20px;">
-                <h1 class="post-full-title">${post.title}</h1>
-                <span class="post-full-date">${post.date}</span>
-            </div>
-            <div class="post-full-content">${post.content}</div>
-        `;
-    } catch (err) {
-        console.error("Content load failed", err);
-    }
-}
-
-        // 3. Search & UI Helpers
+        // 3. UI Helpers
         function handleSearch() {
             const keyword = document.querySelector('.search-input').value.trim();
             if (keyword) window.location.href = `category.html?search=${encodeURIComponent(keyword)}`;
@@ -285,8 +290,7 @@
                     const posts = await res.json(); 
                     if (posts && posts.length > 0) {
                         dropdown.innerHTML = posts.map(p => `
-                            <a href="${p.category.toLowerCase().includes('photo') ? 'photo-view.html' : 'view.html'}?id=${p._id}" class="dropdown-item">
-                                <span class="item-category-en">${p.category}</span>
+                            <a href="view.html?id=${p._id}" class="dropdown-item">
                                 <span class="item-title-ur">${p.title}</span>
                             </a>
                         `).join('');
