@@ -117,7 +117,7 @@
     <section class="category-section" id="alfaz-section" style="padding-bottom: 40px;">
         <div class="section-header-row"><h2 class="section-title-en">Alfaz ki Baatein</h2><h2 class="section-title-ur">الفاظ کی دنیا</h2></div>
         <div class="posts-grid" id="alfaz-container"></div>
-        <div class="view-more-container"><button class="view-more-btn" onclick="location.href='category.html?type=audio'">مزید ...</button></div>
+        <div class="view-more-container"><button class="view-more-btn" onclick="location.href='category.html?type=alfaz-ki-baatein'">مزید ...</button></div>
     </section>
 
     <div id="menu-overlay" class="menu-overlay"></div>
@@ -169,7 +169,7 @@
                 document.getElementById('recent-container').innerHTML = sorted.slice(0, 4).map(renderCard).join('');
                 document.getElementById('articles-container').innerHTML = sorted.filter(p => p.category.toLowerCase().includes('article')).slice(0, 4).map(renderCard).join('');
                 document.getElementById('humor-container').innerHTML = sorted.filter(p => p.category.toLowerCase().includes('humor')).slice(0, 4).map(renderCard).join('');
-                document.getElementById('alfaz-container').innerHTML = sorted.filter(p => p.category.toLowerCase().includes('audio')).slice(0, 4).map(renderCard).join('');
+                document.getElementById('alfaz-container').innerHTML = sorted.filter(p => p.category.toLowerCase().includes('alfaz-ki-baatein')).slice(0, 4).map(renderCard).join('');
 
             } catch (err) { console.error(err); }
         }
