@@ -1,11 +1,7 @@
 {
   "name": "nadir-khan-sargiroh",
   "version": "1.0.0",
-  "description": "Urdu Vocabulary Website Backend",
   "main": "server.js",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
@@ -20,8 +16,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
